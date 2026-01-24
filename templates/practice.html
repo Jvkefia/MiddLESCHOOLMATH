@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}{{ topic.name }} 문제 풀이 - 중학교 수학{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="breadcrumb">
+        <a href="/">홈</a> / <a href="/topic/{{ topic_key }}">{{ topic.name }}</a> / <span>문제 풀이</span>
+    </div>
+
+    <div class="practice-header">
+        <h1>{{ topic.name }} 문제 풀이</h1>
+        <p>문제를 풀고 정답을 확인해보세요!</p>
+    </div>
+
+    <div class="practice-container">
+        <div class="problem-section">
+            <div class="problem-card">
+                <h3>문제</h3>
+                <div id="problem-text" class="problem-text">문제를 불러오는 중...</div>
+                <div id="hint-section" class="hint-section" style="display: none;">
+                    <strong>힌트:</strong> <span id="hint-text"></span>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <label for="user-answer">답안 입력:</label>
+                <input type="text" id="user-answer" placeholder="답을 입력하세요" class="answer-input">
+                <div class="answer-buttons">
+                    <button onclick="checkAnswer()" class="btn btn-primary">정답 확인</button>
+                    <button onclick="showHint()" class="btn btn-secondary">힌트 보기</button>
+                    <button onclick="loadNewProblem()" class="btn btn-success">새 문제</button>
+                </div>
+            </div>
+
+            <div id="result-section" class="result-section" style="display: none;">
+                <div id="result-message" class="result-message"></div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <div class="stats-card">
+                <h3>통계</h3>
+                <div class="stat-item">
+                    <span>풀이한 문제:</span>
+                    <span id="total-problems">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>정답:</span>
+                    <span id="correct-answers">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>정답률:</span>
+                    <span id="accuracy">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <a href="/topic/{{ topic_key }}" class="btn btn-secondary">학습 내용 보기</a>
+        <a href="/" class="btn btn-secondary">홈으로</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let currentProblem = null;
+    let stats = {
+        total: 0,
+        correct: 0
+    };
+
+    // 페이지 로드 시 첫 문제 불러오기
+    window.addEventListener('DOMContentLoaded', function() {
+        loadNewProblem();
+        loadStats();
+    });
+
+    function loadNewProblem() {
+        fetch(`/api/generate_problem/{{ topic_key }}`)
+            .then(response => response.json())
+            .then(data => {
+                currentProblem = data;
+                document.getElementById('problem-text').textContent = data.problem;
+                document.getElementById('hint-text').textContent = data.hint;
+                document.getElementById('hint-section').style.display = 'none';
+                document.getElementById('result-section').style.display = 'none';
+                document.getElementById('user-answer').value = '';
+                document.getElementById('user-answer').focus();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('problem-text').textContent = '문제를 불러오는 데 실패했습니다.';
+            });
+    }
+
+    function checkAnswer() {
+        const userAnswer = document.getElementById('user-answer').value.trim();
+        if (!userAnswer) {
+            alert('답을 입력해주세요!');
+            return;
+        }
+
+        stats.total++;
+        let isCorrect = false;
+        const answer = currentProblem.answer;
+
+        if (Array.isArray(answer)) {
+            // 배열인 경우 (이차방정식 등)
+            isCorrect = answer.some(a => Math.abs(parseFloat(userAnswer) - parseFloat(a)) < 0.01);
+        } else if (typeof answer === 'string') {
+            // 문자열인 경우 (인수분해 등)
+            isCorrect = userAnswer.replace(/\s/g, '') === answer.replace(/\s/g, '');
+        } else {
+            // 숫자인 경우
+            isCorrect = Math.abs(parseFloat(userAnswer) - parseFloat(answer)) < 0.01;
+        }
+
+        if (isCorrect) {
+            stats.correct++;
+            showResult('정답입니다! 🎉', 'correct');
+        } else {
+            const answerText = Array.isArray(answer) ? answer.join(' 또는 ') : answer;
+            showResult(`틀렸습니다. 정답은 ${answerText}입니다.`, 'incorrect');
+        }
+
+        updateStats();
+    }
+
+    function showHint() {
+        document.getElementById('hint-section').style.display = 'block';
+    }
+
+    function showResult(message, type) {
+        const resultSection = document.getElementById('result-section');
+        const resultMessage = document.getElementById('result-message');
+        resultMessage.textContent = message;
+        resultMessage.className = 'result-message ' + type;
+        resultSection.style.display = 'block';
+    }
+
+    function updateStats() {
+        document.getElementById('total-problems').textContent = stats.total;
+        document.getElementById('correct-answers').textContent = stats.correct;
+        const accuracy = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+        document.getElementById('accuracy').textContent = accuracy + '%';
+        saveStats();
+    }
+
+    function loadStats() {
+        const savedStats = localStorage.getItem('mathStats_{{ topic_key }}');
+        if (savedStats) {
+            stats = JSON.parse(savedStats);
+            updateStats();
+        }
+    }
+
+    function saveStats() {
+        localStorage.setItem('mathStats_{{ topic_key }}', JSON.stringify(stats));
+    }
+
+    // Enter 키로 정답 확인
+    document.getElementById('user-answer').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            checkAnswer();
+        }
+    });
+</script>
+{% endblock %}

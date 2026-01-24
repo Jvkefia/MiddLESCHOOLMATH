@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ topic.name }} - 중학교 수학{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="breadcrumb">
+        <a href="/">홈</a> / <span>{{ topic.name }}</span>
+    </div>
+
+    <div class="topic-header">
+        <h1>{{ topic.name }}</h1>
+        <p class="topic-description">{{ topic.description }}</p>
+    </div>
+
+    <div class="lessons-section">
+        <h2>학습 내용</h2>
+        <div class="lessons-list">
+            {% for lesson in topic.lessons %}
+            <div class="lesson-card">
+                <h3>{{ lesson.title }}</h3>
+                <p>{{ lesson.content }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <a href="/practice/{{ topic_key }}" class="btn btn-primary btn-large">문제 풀기</a>
+        <a href="/" class="btn btn-secondary btn-large">홈으로</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}중학교 수학 정복하기{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">📐 중학교 수학</a>
+            <ul class="nav-menu">
+                <li><a href="/">홈</a></li>
+                <li><a href="/topic/algebra">대수</a></li>
+                <li><a href="/topic/geometry">기하</a></li>
+                <li><a href="/topic/statistics">통계</a></li>
+                <li><a href="/topic/function">함수</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 중학교 수학 정복하기. 모든 권리 보유.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1>중학교 수학을 정복하세요! 🎓</h1>
+        <p class="subtitle">체계적인 학습과 연습 문제로 수학 실력을 향상시키세요</p>
+    </div>
+</div>
+
+<div class="container">
+    <section class="topics-section">
+        <h2>학습 주제</h2>
+        <div class="topics-grid">
+            {% for key, topic in topics.items() %}
+            <div class="topic-card">
+                <div class="topic-icon">
+                    {% if key == 'algebra' %}🔢
+                    {% elif key == 'geometry' %}📐
+                    {% elif key == 'statistics' %}📊
+                    {% elif key == 'function' %}📈
+                    {% endif %}
+                </div>
+                <h3>{{ topic.name }}</h3>
+                <p>{{ topic.description }}</p>
+                <div class="topic-actions">
+                    <a href="/topic/{{ key }}" class="btn btn-primary">학습하기</a>
+                    <a href="/practice/{{ key }}" class="btn btn-secondary">문제 풀기</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2>주요 기능</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>체계적인 학습</h3>
+                <p>중학교 수학의 모든 주제를 단계별로 학습할 수 있습니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✏️</div>
+                <h3>다양한 문제</h3>
+                <p>무작위로 생성되는 문제로 실력을 향상시키세요.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>힌트 제공</h3>
+                <p>막혔을 때 도움이 되는 힌트를 제공합니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>반응형 디자인</h3>
+                <p>모바일, 태블릿, 데스크톱 모든 기기에서 사용 가능합니다.</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
