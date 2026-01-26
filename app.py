@@ -191,4 +191,6 @@ def generate_problem(topic_name):
     return jsonify({'error': '문제를 생성할 수 없습니다.'}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
