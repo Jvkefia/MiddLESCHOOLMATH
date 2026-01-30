@@ -16,14 +16,14 @@
 
 2. 필요한 패키지를 설치합니다:
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## 실행 방법
 
 애플리케이션을 실행합니다:
 ```bash
-python app.py
+python3 app.py
 ```
 
 브라우저에서 `http://localhost:5000`으로 접속합니다.
@@ -63,6 +63,59 @@ python app.py
 - **Backend**: Flask (Python)
 - **Frontend**: HTML, CSS, JavaScript
 - **스타일링**: CSS3 (반응형 디자인)
+
+## Render 배포 가이드
+
+이 프로젝트는 Render를 통해 쉽게 배포할 수 있습니다.
+
+### 배포 단계
+
+1. **GitHub에 코드 푸시**
+   ```bash
+   git add .
+   git commit -m "Render 배포 준비"
+   git push origin main
+   ```
+
+2. **Render 계정 생성 및 로그인**
+   - [Render](https://render.com)에 접속하여 계정을 생성합니다.
+   - GitHub 계정으로 로그인하는 것을 권장합니다.
+
+3. **새 Web Service 생성**
+   - Render 대시보드에서 "New +" 버튼을 클릭합니다.
+   - "Web Service"를 선택합니다.
+   - GitHub 저장소를 연결합니다.
+
+4. **자동 설정 확인**
+   - `render.yaml` 파일이 있으면 대부분의 설정이 자동으로 감지됩니다.
+   - 다음 설정이 자동으로 적용됩니다:
+     - **Build Command**: `pip install -r requirements.txt`
+     - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT`
+     - **Python Version**: 3.11.0
+
+5. **수동 설정 (render.yaml이 없는 경우)**
+   - **Name**: `middle-school-math` (또는 원하는 이름)
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT`
+   - **Plan**: Free (무료 플랜)
+
+6. **배포 완료**
+   - "Create Web Service"를 클릭하면 자동으로 빌드가 시작됩니다.
+   - 빌드가 완료되면 제공된 URL로 접속할 수 있습니다.
+   - 예: `https://middle-school-math.onrender.com`
+
+### 주의사항
+
+- Render의 무료 플랜은 15분간 요청이 없으면 서비스가 슬립 모드로 전환됩니다.
+- 첫 요청 시 약간의 지연이 있을 수 있습니다 (서비스 깨우기 시간).
+- 프로덕션 환경에서는 유료 플랜 사용을 권장합니다.
+
+### 환경 변수 설정
+
+필요한 경우 Render 대시보드에서 환경 변수를 추가할 수 있습니다:
+- `PORT`: Render가 자동으로 설정합니다 (수정 불필요)
+- `PYTHON_VERSION`: `render.yaml`에 이미 설정되어 있습니다
 
 ## 라이선스
 
