@@ -19,7 +19,19 @@
             {% for lesson in topic.lessons %}
             <div class="lesson-card">
                 <h3>{{ lesson.title }}</h3>
-                <p>{{ lesson.content }}</p>
+                <div class="lesson-content">
+                    {% for line in lesson.content.split('\n') %}
+                        {% if line.strip() %}
+                            {% if line.startswith('•') %}
+                                <p class="bullet-point">{{ line }}</p>
+                            {% elif line.startswith('  -') %}
+                                <p class="sub-point">{{ line }}</p>
+                            {% else %}
+                                <p>{{ line }}</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
             {% endfor %}
         </div>

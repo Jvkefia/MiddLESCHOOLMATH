@@ -15,10 +15,12 @@
             {% for key, topic in topics.items() %}
             <div class="topic-card">
                 <div class="topic-icon">
-                    {% if key == 'algebra' %}🔢
-                    {% elif key == 'geometry' %}📐
-                    {% elif key == 'statistics' %}📊
-                    {% elif key == 'function' %}📈
+                    {% if key == 'grade1-1' %}📚
+                    {% elif key == 'grade1-2' %}📖
+                    {% elif key == 'grade2-1' %}📘
+                    {% elif key == 'grade2-2' %}📗
+                    {% elif key == 'grade3-1' %}📙
+                    {% elif key == 'grade3-2' %}📕
                     {% endif %}
                 </div>
                 <h3>{{ topic.name }}</h3>
@@ -38,7 +40,7 @@
             <div class="feature-card">
                 <div class="feature-icon">📚</div>
                 <h3>체계적인 학습</h3>
-                <p>중학교 수학의 모든 주제를 단계별로 학습할 수 있습니다.</p>
+                <p>중학교 1학년부터 3학년까지 학기별로 체계적으로 학습할 수 있습니다.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">✏️</div>

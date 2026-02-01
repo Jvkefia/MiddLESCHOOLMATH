@@ -297,6 +297,28 @@ body {
     margin-bottom: 0.5rem;
 }
 
+.lesson-content {
+    line-height: 1.8;
+}
+
+.lesson-content p {
+    margin: 0.5rem 0;
+}
+
+.lesson-content .bullet-point {
+    font-weight: 600;
+    margin-top: 0.8rem;
+    margin-bottom: 0.3rem;
+    color: var(--text-color);
+}
+
+.lesson-content .sub-point {
+    margin-left: 1.5rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    color: #555;
+}
+
 .action-buttons {
     display: flex;
     gap: 1rem;
